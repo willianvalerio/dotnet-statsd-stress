@@ -10,21 +10,23 @@ namespace dotnet_statsd_stress
         static void Main(string[] args)
         {
 
+            Console.WriteLine("Start test");
             var dogstatsdConfig = new StatsdConfig
             {
-                StatsdServerName = "127.0.0.1",
-                StatsdPort = 8125,
+                StatsdServerName = "agent",
+                StatsdPort = 8125
             };
+
             using (var service = new DogStatsdService()){
                 service.Configure(dogstatsdConfig);
 
                 var watch = System.Diagnostics.Stopwatch.StartNew();
 
-                while(watch.Elapsed.TotalSeconds < 60)
+                while(watch.Elapsed.TotalSeconds < 600)
                 {
-                    service.Increment("custom.increment.stress", tags: new[] { "statds_enabled:true" });
+                    service.Increment("stress.hits", tags: new[] { "statds_enabled:true" });
                     //Console.WriteLine("teste: " + watch.ElapsedMilliseconds);
-                    Thread.Sleep(1000);
+                    Thread.Sleep(1);
 
                 }
                 // the code that you want to measure comes here
